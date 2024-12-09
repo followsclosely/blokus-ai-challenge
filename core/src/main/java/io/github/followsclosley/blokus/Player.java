@@ -10,5 +10,4 @@ import java.util.List;
 public class Player {
     private int index;
     private String name;
-    private List<Piece> pieces;
 }

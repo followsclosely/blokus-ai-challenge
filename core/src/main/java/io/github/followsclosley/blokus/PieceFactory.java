@@ -5,17 +5,29 @@ import lombok.Data;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Array;
 import java.util.*;
+
 
 public class PieceFactory {
 
-    private ObjectMapper mapper = new ObjectMapper();
+    public static final String STANDARD_PIECES_FILE = PieceFactory.class.getPackageName().replace('.', '/') +  "/shapes.json";
+    public static final String TINY_PIECES_FILE = PieceFactory.class.getPackageName().replace('.', '/') +  "/shapes-tiny.json";
+
+    private final String piecesFile;
+
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    public PieceFactory() {
+        this(STANDARD_PIECES_FILE);
+    }
+    public PieceFactory(String piecesFile) {
+        this.piecesFile = piecesFile;
+    }
 
     public List<Piece> getPieces(Player player) throws IOException
     {
         List<Piece> pieces = new ArrayList<>();
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("io/github/followsclosley/blokus/shapes.json")) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(piecesFile)) {
             if (inputStream != null) {
                 PieceInformation[] piecesArray = mapper.readValue(inputStream, PieceInformation[].class);
                 for (PieceInformation pieceInformation : piecesArray) {

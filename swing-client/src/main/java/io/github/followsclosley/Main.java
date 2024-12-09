@@ -11,10 +11,10 @@ public class Main {
     public static void main(String[] args) throws Exception {
         System.out.println("Hello, World!");
 
-        Player player0 = new Player(0, "Player 0", null);
-        Player player1 = new Player(1, "Player 1", null);
-        Player player2 = new Player(2, "Player 2", null);
-        Player player3 = new Player(3, "Player 3", null);
+        Player player0 = new Player(0, "Player 0");
+        Player player1 = new Player(1, "Player 1");
+        Player player2 = new Player(2, "Player 2");
+        Player player3 = new Player(3, "Player 3");
 
         SwingSupport support = new SwingSupport()
                 .board(new Board(10, 10))

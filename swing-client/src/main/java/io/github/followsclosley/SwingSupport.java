@@ -19,22 +19,27 @@ public class SwingSupport {
         return this;
     }
 
+    public SwingSupport showPieceNames(boolean showPieceNames) {
+        this.boardPanel.setShowPieceNames(showPieceNames);
+        return this;
+    }
+
     public SwingSupport show()
     {
-        JPanel statusPanel = new JPanel(new BorderLayout());
-        JTextField status = new JTextField("");
-        status.setEditable(false);
-        statusPanel.add(status, BorderLayout.CENTER);
-        JButton undo = new JButton("<");
-        undo.addActionListener((ActionEvent e) -> SwingUtilities.invokeLater(() -> {}));
-        statusPanel.add(undo, BorderLayout.EAST);
+//        JPanel statusPanel = new JPanel(new BorderLayout());
+//        JTextField status = new JTextField("");
+//        status.setEditable(false);
+//        statusPanel.add(status, BorderLayout.CENTER);
+//        JButton undo = new JButton("<");
+//        undo.addActionListener((ActionEvent e) -> SwingUtilities.invokeLater(() -> {}));
+//        statusPanel.add(undo, BorderLayout.EAST);
 
         JFrame frame = new JFrame("Blokus AI:Challenge");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         GridBagConstraints c = new GridBagConstraints();
         frame.add(boardPanel, BorderLayout.CENTER);
-        frame.add(statusPanel, BorderLayout.SOUTH);
+        //frame.add(statusPanel, BorderLayout.SOUTH);
         frame.pack();
         frame.setVisible(true);
 

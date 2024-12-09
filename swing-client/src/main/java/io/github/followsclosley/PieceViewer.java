@@ -9,11 +9,13 @@ import javax.swing.*;
 
 public class PieceViewer {
     public static void main(String[] args) throws Exception {
+
         SwingSupport support = new SwingSupport()
                 .board(new Board(22, 16))
+                .showPieceNames(true)
                 .show();
 
-        Player player0 = new Player(0, "Player 0", null);
+        Player player0 = new Player(0, "Player 0");
 
         PieceFactory factory = new PieceFactory();
 
@@ -21,6 +23,7 @@ public class PieceViewer {
         int y = 0;
         int maxY = 0;
         for (Piece piece : factory.getPieces(player0)) {
+
             support.getBoard().setPiece(x,y, piece);
 
             int[] max = factory.getMaxXY(piece);

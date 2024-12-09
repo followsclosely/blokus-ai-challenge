@@ -2,6 +2,7 @@ package io.github.followsclosley;
 
 import io.github.followsclosley.blokus.Board;
 import io.github.followsclosley.blokus.Piece;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -15,7 +16,8 @@ public class BoardPanel extends JPanel {
     private final Board board;
     protected Dimension defaultDimension;
 
-    private Image[] images = null;
+    @Setter
+    private boolean showPieceNames = false;
 
     public BoardPanel(Board board) {
         this.board = board;
@@ -58,8 +60,10 @@ public class BoardPanel extends JPanel {
                     g.setColor(color);
                     g.fillRoundRect(x * PIECE_SIZE+5, y * PIECE_SIZE+5, PIECE_SIZE - 15, PIECE_SIZE - 15, 10, 10);
 
-                    g.setColor(color.darker().darker());
-                    g.drawString(String.valueOf(piece.getName()), x * PIECE_SIZE + 20, y * PIECE_SIZE + 30);
+                    if( showPieceNames) {
+                        g.setColor(color.darker().darker());
+                        g.drawString(String.valueOf(piece.getName()), x * PIECE_SIZE + 18, y * PIECE_SIZE + 30);
+                    }
                 } else {
                     g.setColor(Color.WHITE);
                     g.fillRoundRect(x * PIECE_SIZE, y * PIECE_SIZE, PIECE_SIZE - 5, PIECE_SIZE - 5, 10, 10);
