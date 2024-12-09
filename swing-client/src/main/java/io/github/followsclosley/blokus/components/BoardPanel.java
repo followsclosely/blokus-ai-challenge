@@ -1,4 +1,4 @@
-package io.github.followsclosley;
+package io.github.followsclosley.blokus.components;
 
 import io.github.followsclosley.blokus.Board;
 import io.github.followsclosley.blokus.Piece;

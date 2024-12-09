@@ -1,11 +1,10 @@
-package io.github.followsclosley;
+package io.github.followsclosley.blokus;
 
-import io.github.followsclosley.blokus.Board;
+import io.github.followsclosley.blokus.components.BoardPanel;
 import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 @Getter
 public class SwingSupport {

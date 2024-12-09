@@ -1,9 +1,4 @@
-package io.github.followsclosley;
-
-import io.github.followsclosley.blokus.Board;
-import io.github.followsclosley.blokus.Piece;
-import io.github.followsclosley.blokus.PieceFactory;
-import io.github.followsclosley.blokus.Player;
+package io.github.followsclosley.blokus;
 
 import javax.swing.*;
 
