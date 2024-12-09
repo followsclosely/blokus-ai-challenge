@@ -1,0 +1,5 @@
+rootProject.name = 'blokus'
+include 'core'
+include 'api'
+include 'swing-client'
+
