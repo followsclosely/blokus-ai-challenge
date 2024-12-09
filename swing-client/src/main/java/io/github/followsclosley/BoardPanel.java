@@ -42,14 +42,14 @@ public class BoardPanel extends JPanel {
 
                     //Draw the space between the horizontal pieces
                     Piece pieceToTheRight = board.getPiece(x + 1, y);
-                    if (pieceToTheRight != null && pieceToTheRight.getPlayer().equals(piece.getPlayer())) {
+                    if (pieceToTheRight != null && pieceToTheRight.equals(piece)) {
                         g.setColor(color.darker().darker());
                         g.fillRect((x+1) * PIECE_SIZE-10, y * PIECE_SIZE+2, 20, PIECE_SIZE-9);
                     }
 
                     //Draw the space between the vertical pieces
                     Piece pieceBelow = board.getPiece(x, y + 1);
-                    if (pieceBelow != null && pieceBelow.getPlayer().equals(piece.getPlayer())) {
+                    if (pieceBelow != null && pieceBelow.equals(piece)) {
                         g.setColor(color.darker().darker());
                         g.fillRect(x * PIECE_SIZE+2, (y+1) * PIECE_SIZE-10, PIECE_SIZE-9, 20);
                     }
