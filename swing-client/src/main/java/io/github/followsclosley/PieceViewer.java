@@ -10,7 +10,7 @@ import javax.swing.*;
 public class PieceViewer {
     public static void main(String[] args) throws Exception {
         SwingSupport support = new SwingSupport()
-                .board(new Board(16, 16))
+                .board(new Board(22, 16))
                 .show();
 
         Player player0 = new Player(0, "Player 0", null);
