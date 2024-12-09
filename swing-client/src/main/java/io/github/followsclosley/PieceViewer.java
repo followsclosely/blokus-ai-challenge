@@ -27,14 +27,13 @@ public class PieceViewer {
             support.getBoard().setPiece(x,y, piece);
 
             //Move to the next position
-            int[] max = factory.getMaxXY(piece);
-            x += max[0] + 2;
-            maxY = Math.max(maxY, max[1]);
+            x += piece.getWidth() + 2;
+            maxY = Math.max(maxY, piece.getHeight());
 
             //If we are at the end of the board, move to the next row
             if( x+1 >= support.getBoard().getWidth()) {
                 x = 0;
-                y += maxY + 2;
+                y += (maxY + 2);
             }
         }
 

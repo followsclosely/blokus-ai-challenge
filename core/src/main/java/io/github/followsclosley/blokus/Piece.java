@@ -1,14 +1,24 @@
 package io.github.followsclosley.blokus;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class Piece {
-    private final String name;
+    private String name;
     private Player player;
-    private final int[][] shape;
+    private int[][] shape;
+    private int width,height;
+
+    public Piece(String name, int[][] shape, Player player){
+        this.name = name;
+        this.shape = shape;
+        this.player = player;
+
+        for (int[] xy : shape) {
+            width = Math.max(width, xy[0]);
+            height = Math.max(height, xy[1]);
+        }
+    }
 }

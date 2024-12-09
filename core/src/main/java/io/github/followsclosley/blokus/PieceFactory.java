@@ -29,21 +29,12 @@ public class PieceFactory {
             if (inputStream != null) {
                 PieceInformation[] piecesArray = mapper.readValue(inputStream, PieceInformation[].class);
                 for (PieceInformation pieceInformation : piecesArray) {
-                    pieces.add(new Piece(pieceInformation.getName(), player, pieceInformation.getShape()));
+                    pieces.add(new Piece(pieceInformation.getName(), pieceInformation.getShape(), player));
                 }
             }
         }
 
         return pieces;
-    }
-
-    public int[] getMaxXY(Piece piece) {
-        int[] max = {0,0};
-        for (int[] xy : piece.getShape()) {
-            max[0] = Math.max(max[0], xy[0]);
-            max[1] = Math.max(max[1], xy[1]);
-        }
-        return max;
     }
 
     @Data

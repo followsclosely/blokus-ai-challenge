@@ -2,7 +2,6 @@ package io.github.followsclosley;
 
 import io.github.followsclosley.blokus.Board;
 import io.github.followsclosley.blokus.Piece;
-import io.github.followsclosley.blokus.PieceFactory;
 import io.github.followsclosley.blokus.Player;
 
 import javax.swing.*;
@@ -24,25 +23,25 @@ public class Main {
         //This is a hack to show a few random pieces on the board
         Thread.sleep(1000);
         SwingUtilities.invokeAndWait(() -> {
-            support.getBoard().setPiece(0,0, new Piece("5V", player0, new int[][]{{0,0},{1,0}, {2,0}, {2,1},{2,2}}));
+            support.getBoard().setPiece(0,0, new Piece("5V", new int[][]{{0,0},{1,0}, {2,0}, {2,1},{2,2}}, player0));
             support.getBoardPanel().repaint();
         });
 
         Thread.sleep(1000);
         SwingUtilities.invokeAndWait(() -> {
-            support.getBoard().setPiece(7,0, new Piece("5V", player1, new int[][]{{0,0},{1,0}, {2,0}, {2,1},{2,2}}));
+            support.getBoard().setPiece(7,0, new Piece("5V", new int[][]{{0,0},{1,0}, {2,0}, {2,1},{2,2}}, player1));
             support.getBoardPanel().repaint();
         });
 
         Thread.sleep(1000);
         SwingUtilities.invokeAndWait(() -> {
-            support.getBoard().setPiece(7,7, new Piece("5V", player2, new int[][]{{0,0},{0,1}, {0,2}, {1,2},{2,2}}));
+            support.getBoard().setPiece(7,7, new Piece("5V", new int[][]{{0,0},{0,1}, {0,2}, {1,2},{2,2}}, player2));
             support.getBoardPanel().repaint();
         });
 
         Thread.sleep(1000);
         SwingUtilities.invokeAndWait(() -> {
-            support.getBoard().setPiece(0,7, new Piece("5V", player3, new int[][]{{0,0},{0,1}, {0,2}, {1,0},{2,0}}));
+            support.getBoard().setPiece(0,7, new Piece("5V", new int[][]{{0,0},{0,1}, {0,2}, {1,0},{2,0}}, player3));
             support.getBoardPanel().repaint();
         });
     }
