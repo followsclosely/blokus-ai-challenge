@@ -19,8 +19,8 @@ public class SwingSupport {
         return this;
     }
 
-    public SwingSupport showPieceNames(boolean showPieceNames) {
-        this.boardPanel.setShowPieceNames(showPieceNames);
+    public SwingSupport showPieceNames() {
+        this.boardPanel.setShowPieceNames(true);
         return this;
     }
 
@@ -38,7 +38,7 @@ public class SwingSupport {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         GridBagConstraints c = new GridBagConstraints();
-        frame.add(boardPanel, BorderLayout.CENTER);
+        frame.add(this.boardPanel, BorderLayout.CENTER);
         //frame.add(statusPanel, BorderLayout.SOUTH);
         frame.pack();
         frame.setVisible(true);

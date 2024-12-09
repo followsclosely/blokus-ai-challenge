@@ -1,13 +1,14 @@
 package io.github.followsclosley.blokus;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-
+@AllArgsConstructor
 public class PieceFactory {
 
     public static final String STANDARD_PIECES_FILE = PieceFactory.class.getPackageName().replace('.', '/') +  "/shapes.json";
@@ -15,17 +16,14 @@ public class PieceFactory {
 
     private final String piecesFile;
 
-    private final ObjectMapper mapper = new ObjectMapper();
-
     public PieceFactory() {
         this(STANDARD_PIECES_FILE);
-    }
-    public PieceFactory(String piecesFile) {
-        this.piecesFile = piecesFile;
     }
 
     public List<Piece> getPieces(Player player) throws IOException
     {
+        ObjectMapper mapper = new ObjectMapper();
+
         List<Piece> pieces = new ArrayList<>();
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(piecesFile)) {
             if (inputStream != null) {

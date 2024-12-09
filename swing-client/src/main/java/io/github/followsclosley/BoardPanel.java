@@ -60,7 +60,7 @@ public class BoardPanel extends JPanel {
                     g.setColor(color);
                     g.fillRoundRect(x * PIECE_SIZE+5, y * PIECE_SIZE+5, PIECE_SIZE - 15, PIECE_SIZE - 15, 10, 10);
 
-                    if( showPieceNames) {
+                    if(showPieceNames) {
                         g.setColor(color.darker().darker());
                         g.drawString(String.valueOf(piece.getName()), x * PIECE_SIZE + 18, y * PIECE_SIZE + 30);
                     }
