@@ -2,6 +2,7 @@ package io.github.followsclosley.blokus.components;
 
 import io.github.followsclosley.blokus.Board;
 import io.github.followsclosley.blokus.Piece;
+import io.github.followsclosley.blokus.Player;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -69,6 +70,26 @@ public class BoardPanel extends JPanel {
                     g.fillRoundRect(x * PIECE_SIZE, y * PIECE_SIZE, PIECE_SIZE - 5, PIECE_SIZE - 5, 10, 10);
                 }
             }
+        }
+
+        try {
+            java.util.List<Player> players = java.util.List.of(
+                    board.getPiece(0, 0).getPlayer()//,
+//                    board.getPiece(board.getWidth() - 1, 0).getPlayer(),
+//                    board.getPiece(0, board.getHeight() - 1).getPlayer(),
+//                    board.getPiece(board.getWidth() - 1, board.getHeight() - 1).getPlayer()
+            );
+
+            for (Player player : players) {
+                if (player != null) {
+                    //Draw playable coordinates
+                    g.setColor(COLORS[player.getIndex()]);
+                    board.getPlayableCoordinates(player).forEach(coordinate ->
+                        g.fillOval(coordinate.getX() * PIECE_SIZE + 20, coordinate.getY() * PIECE_SIZE + 20, 15, 15));
+                }
+            }
+        }catch (Exception e){
+            log.error("Error drawing playable coordinates", e);
         }
     }
 }

@@ -19,7 +19,7 @@ public class Main {
         //This is a hack to show a few random pieces on the board
         Thread.sleep(1000);
         SwingUtilities.invokeAndWait(() -> {
-            support.getBoard().setPiece(0,0, new Piece("5V", new int[][]{{0,0},{1,0}, {2,0}, {2,1},{2,2}}, player0));
+            support.getBoard().setPiece(0,0, new Piece("5Q", new int[][]{{1,0},{1,1},{1,2},{0,0},{2,1}}, player0));
             support.getBoardPanel().repaint();
         });
 
@@ -37,7 +37,21 @@ public class Main {
 
         Thread.sleep(1000);
         SwingUtilities.invokeAndWait(() -> {
-            support.getBoard().setPiece(0,7, new Piece("5V", new int[][]{{0,0},{0,1}, {0,2}, {1,0},{2,0}}, player3));
+            support.getBoard().setPiece(0+1,7-4, new Piece("5V", new int[][]{{0,0},{0,1}, {0,2}, {1,0},{2,0}}, player3));
+            support.getBoardPanel().repaint();
+        });
+
+        Thread.sleep(1000);
+        SwingUtilities.invokeAndWait(() -> {
+            support.getBoard().removePiece(0+1,7-4);
+            support.getBoard().setPiece(0+2,7-4, new Piece("5V", new int[][]{{0,0},{0,1}, {0,2}, {1,0},{2,0}}, player3));
+            support.getBoardPanel().repaint();
+        });
+
+        Thread.sleep(1000);
+        SwingUtilities.invokeAndWait(() -> {
+            support.getBoard().removePiece(0+2,7-4);
+            support.getBoard().setPiece(0+2,7-3, new Piece("5V", new int[][]{{0,0},{0,1}, {0,2}, {1,0},{2,0}}, player3));
             support.getBoardPanel().repaint();
         });
     }
