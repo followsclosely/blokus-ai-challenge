@@ -14,7 +14,7 @@ class BoardTest {
         Board board = new Board(6, 6);
         board.setPiece(0,0, new Piece("5Q", new int[][]{{1,0},{1,1},{1,2},{0,0},{2,1}}, player));
 
-        List<Coordinate> playableCoordinates = board.getPlayableCoordinates(player);
+        List<Coordinate> playableCoordinates = board.getPlayable(player);
         assertEquals(4, playableCoordinates.size());
 
         assertTrue(playableCoordinates.contains(new Coordinate(3, 0)), "Expected (3, 0) to be playable");

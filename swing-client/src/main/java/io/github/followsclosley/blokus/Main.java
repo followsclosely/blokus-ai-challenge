@@ -1,6 +1,7 @@
 package io.github.followsclosley.blokus;
 
 import javax.swing.*;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -16,8 +17,10 @@ public class Main {
                 .showPieceNames()
                 .show();
 
+        support.getBoard().init(List.of(player0, player1, player2, player3));
+
         //This is a hack to show a few random pieces on the board
-        Thread.sleep(1000);
+        Thread.sleep(10000);
         SwingUtilities.invokeAndWait(() -> {
             support.getBoard().setPiece(0,0, new Piece("5Q", new int[][]{{1,0},{1,1},{1,2},{0,0},{2,1}}, player0));
             support.getBoardPanel().repaint();

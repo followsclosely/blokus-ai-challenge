@@ -7,6 +7,8 @@ import java.util.List;
 
 public class Board {
     private final Piece[][] board;
+    private final PlayableSquare[][] playable;
+
     @Getter
     private final int width, height;
 
@@ -14,26 +16,48 @@ public class Board {
         this.width = width;
         this.height = height;
         this.board = new Piece[width][height];
+        this.playable = new PlayableSquare[width][height];
     }
 
-    public Piece getPiece(Coordinate coordinate) {
-        return getPiece(coordinate.getX(), coordinate.getY());
+    public void init(List<Player> players){
+        //This supports just 4 player mode at this point.
+        if (players.size() == 4)
+        {
+            playable[0][0] = new PlayableSquare(new Coordinate(0, 0));
+            playable[0][0].setUpperLeft(players.get(0));
+
+            playable[width - 1][0] = new PlayableSquare(new Coordinate(width - 1, 0));
+            playable[width - 1][0].setUpperRight(players.get(1));
+
+            playable[width - 1][height - 1] = new PlayableSquare(new Coordinate(width - 1, height - 1));
+            playable[width - 1][height - 1].setLowerRight(players.get(2));
+
+            playable[0][height - 1] = new PlayableSquare(new Coordinate(0, height - 1));
+            playable[0][height - 1].setLowerLeft(players.get(3));
+        }
     }
+
     public Piece getPiece(int x, int y) {
         return ( x<0 || x>=width || y<0 || y>=height) ? null : board[x][y];
     }
 
-    public void setPiece(Coordinate coordinate, Piece piece) {
-        setPiece(coordinate.getX(), coordinate.getY(), piece);
-    }
     public void setPiece(int x, int y, Piece piece) {
         int[][] shape = piece.getShape();
         for (int[] xy : shape) {
             board[x + xy[0]][y + xy[1]] = piece;
         }
-    }
-    //remove piece from board
 
+        //Update the playable spots
+        for (int[] xy : shape) {
+            playable[x + xy[0]][y + xy[1]] = null;
+        }
+    }
+
+    public PlayableSquare getPlayable(int x, int y){
+        return playable[x][y];
+    }
+
+    //remove piece from board
     public void removePiece(int x, int y) {
         Piece piece = getPiece(x, y);
         if (piece == null){
@@ -45,7 +69,7 @@ public class Board {
         }
     }
 
-    public List<Coordinate> getPlayableCoordinates(Player player){
+    public List<Coordinate> getPlayable(Player player){
         List<Coordinate> playableCoordinates = new ArrayList<>();
         for (int y = 0; y < height; y++){
             for (int x = 0; x < width; x++){
