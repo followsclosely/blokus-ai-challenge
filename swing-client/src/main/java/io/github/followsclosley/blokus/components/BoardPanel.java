@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 @Slf4j
 public class BoardPanel extends JPanel {
@@ -35,8 +36,9 @@ public class BoardPanel extends JPanel {
         super.paintComponent(g);
 
         //Draw the pieces on the board
-        for (int x = 0, width = board.getWidth(); x < width; x++) {
-            for (int y = 0, height = board.getHeight(); y < height; y++) {
+        for (int y = 0, height = board.getHeight(); y < height; y++) {
+            for (int x = 0, width = board.getWidth(); x < width; x++) {
+
                 Piece piece = board.getPiece(x, y);
                 if(piece != null) {
                     Color color = COLORS[piece.getPlayer().getIndex()];
@@ -72,24 +74,31 @@ public class BoardPanel extends JPanel {
             }
         }
 
-        try {
-            java.util.List<Player> players = java.util.List.of(
-                    board.getPiece(0, 0).getPlayer()//,
-//                    board.getPiece(board.getWidth() - 1, 0).getPlayer(),
-//                    board.getPiece(0, board.getHeight() - 1).getPlayer(),
-//                    board.getPiece(board.getWidth() - 1, board.getHeight() - 1).getPlayer()
-            );
 
-            for (Player player : players) {
-                if (player != null) {
-                    //Draw playable coordinates
-                    g.setColor(COLORS[player.getIndex()]);
-                    board.getPlayableCoordinates(player).forEach(coordinate ->
-                        g.fillOval(coordinate.getX() * PIECE_SIZE + 20, coordinate.getY() * PIECE_SIZE + 20, 15, 15));
+
+        //This is a hack to draw the playable coordinates on top of the pieces
+        java.util.List<Player> players = new ArrayList<>();
+
+        for (int y = 0, height = board.getHeight(); y < height; y++) {
+            for (int x = 0, width = board.getWidth(); x < width; x++) {
+                Piece piece = board.getPiece(x, y);
+                if (piece != null) {
+                    Player player = piece.getPlayer();
+                    if (player != null && !players.contains(player)) {
+                        players.add(piece.getPlayer());
+                    }
                 }
             }
-        }catch (Exception e){
-            log.error("Error drawing playable coordinates", e);
         }
+
+        for (Player player : players) {
+            if (player != null) {
+                //Draw playable coordinates
+                g.setColor(COLORS[player.getIndex()]);
+                board.getPlayableCoordinates(player).forEach(coordinate ->
+                    g.fillOval(coordinate.getX() * PIECE_SIZE + 20, coordinate.getY() * PIECE_SIZE + 20, 15, 15));
+            }
+        }
+
     }
 }
