@@ -6,6 +6,7 @@ import lombok.Getter;
 import javax.swing.*;
 import java.awt.*;
 
+
 @Getter
 public class SwingSupport {
 
@@ -36,7 +37,7 @@ public class SwingSupport {
         JFrame frame = new JFrame("Blokus AI:Challenge");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-        GridBagConstraints c = new GridBagConstraints();
+        //GridBagConstraints c = new GridBagConstraints();
         frame.add(this.boardPanel, BorderLayout.CENTER);
         //frame.add(statusPanel, BorderLayout.SOUTH);
         frame.pack();
