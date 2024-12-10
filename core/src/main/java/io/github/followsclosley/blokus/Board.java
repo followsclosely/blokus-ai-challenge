@@ -1,10 +1,13 @@
 package io.github.followsclosley.blokus;
 
+import lombok.Data;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class Board {
     private final Piece[][] board;
     private final PlayableSquare[][] playable;
@@ -19,40 +22,81 @@ public class Board {
         this.playable = new PlayableSquare[width][height];
     }
 
-    public void init(List<Player> players){
+    public void init(Player... players){
         //This supports just 4 player mode at this point.
-        if (players.size() == 4)
-        {
+        if (players.length > 0) {
             playable[0][0] = new PlayableSquare(new Coordinate(0, 0));
-            playable[0][0].setUpperLeft(players.get(0));
+            playable[0][0].setUpperLeft(players[0]);
+        }
 
+        if (players.length > 1) {
             playable[width - 1][0] = new PlayableSquare(new Coordinate(width - 1, 0));
-            playable[width - 1][0].setUpperRight(players.get(1));
+            playable[width - 1][0].setUpperRight(players[1]);
+        }
 
+        if (players.length > 2) {
             playable[width - 1][height - 1] = new PlayableSquare(new Coordinate(width - 1, height - 1));
-            playable[width - 1][height - 1].setLowerRight(players.get(2));
+            playable[width - 1][height - 1].setLowerRight(players[2]);
+        }
 
+        if (players.length > 3) {
             playable[0][height - 1] = new PlayableSquare(new Coordinate(0, height - 1));
-            playable[0][height - 1].setLowerLeft(players.get(3));
+            playable[0][height - 1].setLowerLeft(players[3]);
         }
     }
 
+    public Piece getPiece(Coordinate c){
+        return getPiece(c.getX(), c.getY());
+    }
     public Piece getPiece(int x, int y) {
         return ( x<0 || x>=width || y<0 || y>=height) ? null : board[x][y];
     }
 
     public void setPiece(int x, int y, Piece piece) {
-        int[][] shape = piece.getShape();
-        for (int[] xy : shape) {
+        for (int[] xy : piece.getShape()) {
             board[x + xy[0]][y + xy[1]] = piece;
         }
 
-        //Update the playable spots
-        for (int[] xy : shape) {
+        updatePlayable(x,y,piece);
+    }
+
+    public void updatePlayable(int x, int y, Piece piece){
+        for (int[] xy : piece.getShape()) {
+            //null out the spaces consumed
             playable[x + xy[0]][y + xy[1]] = null;
+
+
+            for (Coordinate delta : SEARCH_DIRECTIONS_DIAGONAL){
+                Coordinate diagonalCoordinate = new Coordinate(x + delta.getX(), y + delta.getY());
+                Piece diagonal = getPiece(diagonalCoordinate);
+                if( diagonal == null){
+                    boolean valid = true;
+                    for (Coordinate adjacent : SEARCH_DIRECTIONS_ADJACENT) {
+                        Coordinate translated = diagonalCoordinate.translate(adjacent);
+                        Piece adjacentPiece = getPiece(translated);
+                        if( adjacentPiece != null && adjacentPiece.getPlayer().equals(piece.getPlayer())){
+                            valid = false;
+                            break;
+                        }
+                    }
+
+                    if ( valid ){
+                        PlayableSquare playable = getPlayable(diagonalCoordinate);
+                        if( playable == null ){
+                            this.playable[diagonalCoordinate.getY()][diagonalCoordinate.getY()] = playable = new PlayableSquare(diagonalCoordinate);
+                        }
+
+                        //Set the correct direction?
+                        //playable.
+                    }
+                }
+            }
         }
     }
 
+    public PlayableSquare getPlayable(Coordinate c){
+        return getPlayable(c.getX(), c.getY());
+    }
     public PlayableSquare getPlayable(int x, int y){
         return playable[x][y];
     }
@@ -119,4 +163,10 @@ public class Board {
             new Coordinate(-1, -1),
             new Coordinate(1, -1)
     };
+
+    private static final class SearchDirection extends Coordinate{
+        public SearchDirection(int x, int y){
+            super(x, y);
+        }
+    }
 }

@@ -34,4 +34,22 @@ class BoardTest {
         assertFalse(board.isPlayable(2, 0, player), "Expected (2, 0) to not be playable");
         assertTrue(board.isPlayable(3, 0, player), "Expected (3, 0) to be playable");
     }
+
+    @Test
+    void updatePlayable(){
+        Player player = new Player(0, "Test Player");
+        Board board = new Board(6, 6);
+        board.init(player);
+        BlokusTestUtils.printBoard(board);
+
+        PlayableSquare playable = board.getPlayable(0,0);
+        assertEquals(player, playable.getUpperLeft(), "The top left should be playable.");
+        board.setPiece(0,0, new Piece("5Q", new int[][]{{1,0},{1,1},{1,2},{0,0},{2,1}}, player));
+        BlokusTestUtils.printBoard(board);
+
+
+//        for(int i =0; i<256; i++){
+//            System.out.println(i + " " + Character.toString(i));
+//        }
+    }
 }

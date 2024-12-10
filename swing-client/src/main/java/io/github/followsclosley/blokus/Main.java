@@ -17,7 +17,7 @@ public class Main {
                 .showPieceNames()
                 .show();
 
-        support.getBoard().init(List.of(player0, player1, player2, player3));
+        support.getBoard().init(player0, player1, player2, player3);
 
         //This is a hack to show a few random pieces on the board
         Thread.sleep(10000);

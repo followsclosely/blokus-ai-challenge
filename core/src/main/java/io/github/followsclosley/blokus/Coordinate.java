@@ -11,6 +11,10 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class Coordinate {
     private final int x, y;
+
+    public Coordinate translate(Coordinate coordinate){
+        return new Coordinate(x+coordinate.getX(), y + coordinate.getY());
+    }
 }
 
 
