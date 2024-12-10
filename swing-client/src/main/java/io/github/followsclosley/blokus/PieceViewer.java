@@ -22,13 +22,13 @@ public class PieceViewer {
             support.getBoard().setPiece(x,y, piece);
 
             //Move to the next position
-            x += piece.getWidth() + 2;
+            x += piece.getWidth() + 1;
             maxY = Math.max(maxY, piece.getHeight());
 
             //If we are at the end of the board, move to the next row
             if( x+1 >= support.getBoard().getWidth()) {
                 x = 0;
-                y += (maxY + 2);
+                y += (maxY + 1);
             }
         }
 

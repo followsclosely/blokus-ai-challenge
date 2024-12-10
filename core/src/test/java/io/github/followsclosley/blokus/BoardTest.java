@@ -17,10 +17,10 @@ class BoardTest {
         List<Coordinate> playableCoordinates = board.getPlayableCoordinates(player);
         assertEquals(4, playableCoordinates.size());
 
-        assertEquals(new Coordinate(3, 0), playableCoordinates.get(0));
-        assertEquals(new Coordinate(3, 2), playableCoordinates.get(1));
-        assertEquals(new Coordinate(0, 3), playableCoordinates.get(2));
-        assertEquals(new Coordinate(2, 3), playableCoordinates.get(3));
+        assertTrue(playableCoordinates.contains(new Coordinate(3, 0)), "Expected (3, 0) to be playable");
+        assertTrue(playableCoordinates.contains(new Coordinate(3, 2)), "Expected (3, 2) to be playable");
+        assertTrue(playableCoordinates.contains(new Coordinate(0, 3)), "Expected (0, 3 to be playable");
+        assertTrue(playableCoordinates.contains(new Coordinate(2, 3)), "Expected (2, 3) to be playable");
     }
 
     @Test
@@ -29,9 +29,9 @@ class BoardTest {
         Board board = new Board(6, 6);
         board.setPiece(0,0, new Piece("5Q", new int[][]{{1,0},{1,1},{1,2},{0,0},{2,1}}, player));
 
-        assertFalse(board.isPlayable(0, 0, player));
-        assertFalse(board.isPlayable(1, 0, player));
-        assertFalse(board.isPlayable(2, 0, player));
-        assertTrue(board.isPlayable(3, 0, player));
+        assertFalse(board.isPlayable(0, 0, player), "Expected (0, 0) to not be playable");
+        assertFalse(board.isPlayable(1, 0, player), "Expected (1, 0) to not be playable");
+        assertFalse(board.isPlayable(2, 0, player), "Expected (2, 0) to not be playable");
+        assertTrue(board.isPlayable(3, 0, player), "Expected (3, 0) to be playable");
     }
 }

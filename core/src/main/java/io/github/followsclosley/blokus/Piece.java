@@ -1,9 +1,11 @@
 package io.github.followsclosley.blokus;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@EqualsAndHashCode(of = {"shape", "player"})
 @NoArgsConstructor
 public class Piece {
     private String name;
@@ -17,8 +19,8 @@ public class Piece {
         this.player = player;
 
         for (int[] xy : shape) {
-            width = Math.max(width, xy[0]);
-            height = Math.max(height, xy[1]);
+            width = Math.max(width, xy[0]+1);
+            height = Math.max(height, xy[1]+1);
         }
     }
 }
