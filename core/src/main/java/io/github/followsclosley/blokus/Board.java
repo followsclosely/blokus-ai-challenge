@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-
+/**
+ * The board class represents the game board.
+ */
 @Slf4j
 public class Board {
     private final Piece[][] board;
@@ -23,6 +25,16 @@ public class Board {
         this.playable = new PlayableSquare[width][height];
     }
 
+    /**
+     * Initialize the board in the following way:
+     * <ol>
+     *     <li>Player 0 is placed in the upper left corner and that corner is marked as playable.</li>
+     *     <li>Player 1 is placed in the upper right corner and that corner is marked as playable.</li>
+     *     <li>Player 2 is placed in the lower right corner and that corner is marked as playable.</li>
+     *     <li>Player 3 is placed in the lower left corner and that corner is marked as playable.</li>
+     * </ol>
+     * @param players the players
+     */
     public void init(Player... players){
         if (players.length > 0) {
             playable[0][0] = new PlayableSquare(new Coordinate(0, 0));
@@ -52,6 +64,13 @@ public class Board {
         return ( x<0 || x>=width || y<0 || y>=height) ? null : board[x][y];
     }
 
+    /**
+     * Set the piece on the board.
+     *
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param piece the piece
+     */
     public void setPiece(int x, int y, Piece piece) {
         for (int[] xy : piece.getShape()) {
             board[x + xy[0]][y + xy[1]] = piece;
@@ -60,11 +79,18 @@ public class Board {
         updatePlayable(x,y,piece);
     }
 
+    /**
+     * Update the playable squares on the board.
+     *
+     * @param x     x coordinate
+     * @param y     y coordinate
+     * @param piece the piece
+     */
     public void updatePlayable(int x, int y, Piece piece){
         Coordinate locationOfPlay = new Coordinate(x,y);
         //null out the spaces consumed
         for (int[] xy : piece.getShape()) {
-           // log.info("Nulling out {} {}", x + xy[0], y + xy[1]);
+            //log.info("Nulling out {} {}", x + xy[0], y + xy[1]);
             playable[x + xy[0]][y + xy[1]] = null;
         }
 
@@ -81,7 +107,7 @@ public class Board {
                 if ( isOnBoard(diagonalCoordinate) ) {
 
                     Piece diagonal = getPiece(diagonalCoordinate);
-                    //If the diagonal is empty, and the adjacent spaces are not the same color, then it is playable.
+                    //If the diagonal is empty and the adjacent spaces are not the same color, then it is playable.
                     if (diagonal == null) {
                         boolean valid = true;
                         for (Coordinate adjacent : SEARCH_DIRECTIONS_ADJACENT) {
@@ -99,23 +125,30 @@ public class Board {
                                 setPlayable(diagonalCoordinate, playable = new PlayableSquare(diagonalCoordinate));
                             }
 
-                            Consumer<Player> function = switch(i){
-                                case 0 -> playable::setUpperLeft;
-                                case 1 -> playable::setUpperRight;
-                                case 2 -> playable::setLowerRight;
-                                case 3 -> playable::setLowerLeft;
-                                default -> throw new IllegalArgumentException("Invalid index: " + i);
-                            };
-
-                            function.accept(piece.getPlayer());
+                            setPlayerOn(playable, i).accept(piece.getPlayer());
                         }
 
-                    } else {
-                        //log.info("{}   Nothing to check given there is a piece here {}", xy, diagonal);
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Set the player on the playable square using the index i.
+     *
+     * @param playable the playable square
+     * @param i the index
+     * @return the consumer
+     */
+    private Consumer<Player> setPlayerOn(PlayableSquare playable, int i){
+        return switch(i){
+            case 0 -> playable::setUpperLeft;
+            case 1 -> playable::setUpperRight;
+            case 2 -> playable::setLowerRight;
+            case 3 -> playable::setLowerLeft;
+            default -> throw new IllegalArgumentException("Invalid index: " + i);
+        };
     }
 
     public void setPlayable(Coordinate c, PlayableSquare playable){
@@ -197,10 +230,4 @@ public class Board {
             new Coordinate(-1, -1),
             new Coordinate(1, -1)
     };
-
-    private static final class SearchDirection extends Coordinate{
-        public SearchDirection(int x, int y){
-            super(x, y);
-        }
-    }
 }
