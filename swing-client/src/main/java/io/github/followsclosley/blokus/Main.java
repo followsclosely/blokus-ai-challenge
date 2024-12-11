@@ -13,7 +13,7 @@ public class Main {
 
         SwingSupport support = new SwingSupport()
                 .board(new Board(10, 10))
-                .showPieceNames()
+                //.showPieceNames()
                 .showMoves()
                 .show();
 
@@ -53,6 +53,12 @@ public class Main {
         Thread.sleep(1000);
         SwingUtilities.invokeAndWait(() -> {
             support.getBoard().setPiece(3,3, new Piece("1I", new int[][]{{0,0}}, player0));
+            support.getBoardPanel().repaint();
+        });
+
+        Thread.sleep(1000);
+        SwingUtilities.invokeAndWait(() -> {
+            support.getBoard().setPiece(4,4, new Piece("40", new int[][]{{0,0},{1,0},{0,1},{1,1}}, player0));
             support.getBoardPanel().repaint();
         });
 
