@@ -1,6 +1,7 @@
 package io.github.followsclosley.blokus;
 
 import javax.swing.*;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -15,6 +16,8 @@ public class Main {
                 .board(new Board(10, 10))
                 .showPieceNames()
                 .show();
+
+        support.getBoard().init(player0, player1, player2, player3);
 
         //This is a hack to show a few random pieces on the board
         Thread.sleep(1000);
@@ -37,22 +40,9 @@ public class Main {
 
         Thread.sleep(1000);
         SwingUtilities.invokeAndWait(() -> {
-            support.getBoard().setPiece(0+1,7-4, new Piece("5V", new int[][]{{0,0},{0,1}, {0,2}, {1,0},{2,0}}, player3));
+            support.getBoard().setPiece(0+3,7-3, new Piece("5V", new int[][]{{0,0},{0,1}, {0,2}, {1,0},{2,0}}, player3));
             support.getBoardPanel().repaint();
         });
 
-        Thread.sleep(1000);
-        SwingUtilities.invokeAndWait(() -> {
-            support.getBoard().removePiece(0+1,7-4);
-            support.getBoard().setPiece(0+2,7-4, new Piece("5V", new int[][]{{0,0},{0,1}, {0,2}, {1,0},{2,0}}, player3));
-            support.getBoardPanel().repaint();
-        });
-
-        Thread.sleep(1000);
-        SwingUtilities.invokeAndWait(() -> {
-            support.getBoard().removePiece(0+2,7-4);
-            support.getBoard().setPiece(0+2,7-3, new Piece("5V", new int[][]{{0,0},{0,1}, {0,2}, {1,0},{2,0}}, player3));
-            support.getBoardPanel().repaint();
-        });
     }
 }

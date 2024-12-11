@@ -2,6 +2,7 @@ package io.github.followsclosley.blokus.components;
 
 import io.github.followsclosley.blokus.Board;
 import io.github.followsclosley.blokus.Piece;
+import io.github.followsclosley.blokus.PlayableSquare;
 import io.github.followsclosley.blokus.Player;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -74,8 +75,13 @@ public class BoardPanel extends JPanel {
             }
         }
 
+        //drawPlayableSquaresDeprecated(g);
+        drawPlayableSquares(g);
 
+    }
 
+    @Deprecated
+    private void drawPlayableSquaresDeprecated(Graphics g){
         //This is a hack to draw the playable coordinates on top of the pieces
         java.util.List<Player> players = new ArrayList<>();
 
@@ -95,10 +101,43 @@ public class BoardPanel extends JPanel {
             if (player != null) {
                 //Draw playable coordinates
                 g.setColor(COLORS[player.getIndex()]);
-                board.getPlayableCoordinates(player).forEach(coordinate ->
-                    g.fillOval(coordinate.getX() * PIECE_SIZE + 20, coordinate.getY() * PIECE_SIZE + 20, 15, 15));
+                board.getPlayable(player).forEach(coordinate ->
+                        g.fillOval(coordinate.getX() * PIECE_SIZE + 20, coordinate.getY() * PIECE_SIZE + 20, 15, 15));
             }
         }
+    }
 
+    private void drawPlayableSquares(Graphics g){
+        for (int y = 0, height = board.getHeight(); y < height; y++) {
+            for (int x = 0, width = board.getWidth(); x < width; x++) {
+                PlayableSquare playable = board.getPlayable(x,y);
+                if( playable != null ) {
+
+                    Player upperLeft = playable.getUpperLeft();
+                    if (upperLeft != null) {
+                        g.setColor(COLORS[upperLeft.getIndex()]);
+                        g.fillOval(playable.getCoordinate().getX() * PIECE_SIZE + 5, playable.getCoordinate().getY() * PIECE_SIZE + 5, 10, 10);
+                    }
+
+                    Player upperRight = playable.getUpperRight();
+                    if (upperRight != null) {
+                        g.setColor(COLORS[upperRight.getIndex()]);
+                        g.fillOval(playable.getCoordinate().getX() * PIECE_SIZE + PIECE_SIZE-20, playable.getCoordinate().getY() * PIECE_SIZE + 5, 10, 10);
+                    }
+
+                    Player lowerRight = playable.getLowerRight();
+                    if (lowerRight != null) {
+                        g.setColor(COLORS[lowerRight.getIndex()]);
+                        g.fillOval(playable.getCoordinate().getX() * PIECE_SIZE + PIECE_SIZE-20, playable.getCoordinate().getY() * PIECE_SIZE + PIECE_SIZE-20, 10, 10);
+                    }
+
+                    Player lowerLeft = playable.getLowerLeft();
+                    if (lowerLeft != null) {
+                        g.setColor(COLORS[lowerLeft.getIndex()]);
+                        g.fillOval(playable.getCoordinate().getX() * PIECE_SIZE + 5, playable.getCoordinate().getY() * PIECE_SIZE + PIECE_SIZE-20, 10, 10);
+                    }
+                }
+            }
+        }
     }
 }
