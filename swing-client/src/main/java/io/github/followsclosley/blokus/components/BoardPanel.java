@@ -75,7 +75,7 @@ public class BoardPanel extends JPanel {
             }
         }
 
-        drawPlayableSquaresDeprecated(g);
+        //drawPlayableSquaresDeprecated(g);
         drawPlayableSquares(g);
 
     }

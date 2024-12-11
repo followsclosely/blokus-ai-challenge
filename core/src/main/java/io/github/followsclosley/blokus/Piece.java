@@ -3,8 +3,10 @@ package io.github.followsclosley.blokus;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
+@ToString
 @EqualsAndHashCode(of = {"shape", "player"})
 @NoArgsConstructor
 public class Piece {
