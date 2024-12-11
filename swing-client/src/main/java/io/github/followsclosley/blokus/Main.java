@@ -15,6 +15,7 @@ public class Main {
         SwingSupport support = new SwingSupport()
                 .board(new Board(10, 10))
                 .showPieceNames()
+                .showMoves()
                 .show();
 
         support.getBoard().init(player0, player1, player2, player3);
@@ -40,7 +41,19 @@ public class Main {
 
         Thread.sleep(1000);
         SwingUtilities.invokeAndWait(() -> {
-            support.getBoard().setPiece(0+3,7-3, new Piece("5V", new int[][]{{0,0},{0,1}, {0,2}, {1,0},{2,0}}, player3));
+            support.getBoard().setPiece(0,7, new Piece("5V", new int[][]{{0,0},{0,1}, {0,2}, {1,0},{2,0}}, player3));
+            support.getBoardPanel().repaint();
+        });
+
+        Thread.sleep(1000);
+        SwingUtilities.invokeAndWait(() -> {
+            support.getBoard().setPiece(0,3, new Piece("4L", new int[][]{{0,0},{0,1},{1,1},{2,1}}, player0));
+            support.getBoardPanel().repaint();
+        });
+
+        Thread.sleep(1000);
+        SwingUtilities.invokeAndWait(() -> {
+            support.getBoard().setPiece(3,3, new Piece("1I", new int[][]{{0,0}}, player0));
             support.getBoardPanel().repaint();
         });
 

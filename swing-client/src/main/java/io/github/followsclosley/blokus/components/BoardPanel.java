@@ -21,6 +21,8 @@ public class BoardPanel extends JPanel {
 
     @Setter
     private boolean showPieceNames = false;
+    @Setter
+    private boolean showMoves = false;
 
     public BoardPanel(Board board) {
         this.board = board;
@@ -75,36 +77,10 @@ public class BoardPanel extends JPanel {
             }
         }
 
-        //drawPlayableSquaresDeprecated(g);
-        drawPlayableSquares(g);
-
-    }
-
-    @Deprecated
-    private void drawPlayableSquaresDeprecated(Graphics g){
-        //This is a hack to draw the playable coordinates on top of the pieces
-        java.util.List<Player> players = new ArrayList<>();
-
-        for (int y = 0, height = board.getHeight(); y < height; y++) {
-            for (int x = 0, width = board.getWidth(); x < width; x++) {
-                Piece piece = board.getPiece(x, y);
-                if (piece != null) {
-                    Player player = piece.getPlayer();
-                    if (player != null && !players.contains(player)) {
-                        players.add(piece.getPlayer());
-                    }
-                }
-            }
+        if ( showMoves ) {
+            drawPlayableSquares(g);
         }
 
-        for (Player player : players) {
-            if (player != null) {
-                //Draw playable coordinates
-                g.setColor(COLORS[player.getIndex()]);
-                board.getPlayable(player).forEach(coordinate ->
-                        g.fillOval(coordinate.getX() * PIECE_SIZE + 20, coordinate.getY() * PIECE_SIZE + 20, 15, 15));
-            }
-        }
     }
 
     private void drawPlayableSquares(Graphics g){

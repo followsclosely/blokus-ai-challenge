@@ -24,6 +24,11 @@ public class SwingSupport {
         return this;
     }
 
+    public SwingSupport showMoves() {
+        this.boardPanel.setShowMoves(true);
+        return this;
+    }
+
     public SwingSupport show()
     {
 //        JPanel statusPanel = new JPanel(new BorderLayout());

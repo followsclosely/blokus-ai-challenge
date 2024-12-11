@@ -97,12 +97,22 @@ public class Board {
         for (int[] xy : piece.getShape()) {
             Coordinate locationOfPiece = locationOfPlay.translate(xy);
 
-            //log.info("{} Checking {}", xy, locationOfPiece);
+            //clear the current player from the adjacent squares
+            for(Coordinate direction : SEARCH_DIRECTIONS_ADJACENT){
+                Coordinate adjacentCoordinate = locationOfPiece.translate(direction);
+                PlayableSquare playableSquare = getPlayable(adjacentCoordinate);
+                if( playableSquare != null ){
+                    playableSquare.clear(piece.getPlayer());
+                }
+            }
+
+            //Create the PlayableSquare and set the current player on the diagonal squares if:
+            // 1. The diagonal square is on the board.
+            // 2. The diagonal square is empty.
+            // 3. The adjacent squares are not the same color.
             for(int i=0, length=SEARCH_DIRECTIONS_DIAGONAL.length; i<length; i++){
                 Coordinate delta = SEARCH_DIRECTIONS_DIAGONAL[i];
-                //log.info("{}    {} Checking {}", locationOfPiece, i, delta);
                 Coordinate diagonalCoordinate = locationOfPiece.translate(delta);
-                //log.info("{}    {} Checking diagonal {}", locationOfPiece, i, diagonalCoordinate);
 
                 if ( isOnBoard(diagonalCoordinate) ) {
 
@@ -119,13 +129,17 @@ public class Board {
                             }
                         }
 
+                        PlayableSquare playable = getPlayable(diagonalCoordinate);
+
                         if (valid) {
-                            PlayableSquare playable = getPlayable(diagonalCoordinate);
                             if (playable == null) {
                                 setPlayable(diagonalCoordinate, playable = new PlayableSquare(diagonalCoordinate));
                             }
-
                             setPlayerOn(playable, i).accept(piece.getPlayer());
+                        } else {
+                            if (playable != null) {
+                                setPlayerOn(playable, i).accept(null);
+                            }
                         }
 
                     }
