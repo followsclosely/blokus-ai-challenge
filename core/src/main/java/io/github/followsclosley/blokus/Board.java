@@ -3,8 +3,6 @@ package io.github.followsclosley.blokus;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -192,43 +190,6 @@ public class Board {
     }
     public boolean isOnBoard(int x, int y){
         return x >= 0 && x < width && y >= 0 && y < height;
-    }
-
-    public List<Coordinate> getPlayable(Player player){
-        List<Coordinate> playableCoordinates = new ArrayList<>();
-        for (int y = 0; y < height; y++){
-            for (int x = 0; x < width; x++){
-                if (isPlayable(x, y, player)){
-                    playableCoordinates.add(new Coordinate(x, y));
-                }
-            }
-        }
-        return playableCoordinates;
-    }
-
-    public boolean isPlayable(int x, int y, Player player){
-        //Is the space empty.
-        if (getPiece(x, y) != null){
-            return false;
-        }
-
-        //Is the space adjacent to a piece of the same color.
-        for (Coordinate direction : SEARCH_DIRECTIONS_ADJACENT){
-            Piece adjacent = getPiece(x + direction.getX(), y + direction.getY());
-            if (adjacent != null && adjacent.getPlayer() == player){
-                return false;
-            }
-        }
-
-        //Is the space diagonal to a piece of the same color.
-        for (Coordinate direction : SEARCH_DIRECTIONS_DIAGONAL){
-            Piece diagonal = getPiece(x + direction.getX(), y + direction.getY());
-            if (diagonal != null && diagonal.getPlayer() == player){
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private static final Coordinate[] SEARCH_DIRECTIONS_ADJACENT = {
