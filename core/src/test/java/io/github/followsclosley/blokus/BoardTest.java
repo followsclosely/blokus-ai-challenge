@@ -22,12 +22,6 @@ class BoardTest {
     void updatePlayableStartThen5Q(){
         Player player = new Player(0, "Test Player");
         Board board = new Board(6, 6);
-        board.init(player);
-        BlokusTestUtils.printBoard(board);
-        assertNotNull( board.getPlayable(0,0), "The (0,0) should be playable" );
-
-        PlayableSquare playable = board.getPlayable(0,0);
-        assertEquals(player, playable.getUpperLeft(), "The top left should be playable.");
 
         board.setPiece(0,0, new Piece("5Q", new int[][]{{0,0},{1,0},{1,1},{1,2},{2,1}}, player));
         BlokusTestUtils.printBoard(board);

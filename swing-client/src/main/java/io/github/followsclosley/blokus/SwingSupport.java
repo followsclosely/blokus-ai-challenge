@@ -19,6 +19,12 @@ public class SwingSupport {
         return this;
     }
 
+    public SwingSupport board(Board board, int pieceSize) {
+        this.board = board;
+        this.boardPanel = new BoardPanel(board, pieceSize);
+        return this;
+    }
+
     public SwingSupport showPieceNames() {
         this.boardPanel.setShowPieceNames(true);
         return this;

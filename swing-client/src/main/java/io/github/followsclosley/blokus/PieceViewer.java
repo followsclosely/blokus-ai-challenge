@@ -6,7 +6,7 @@ public class PieceViewer {
     public static void main(String[] args) throws Exception {
 
         SwingSupport support = new SwingSupport()
-                .board(new Board(22, 16))
+                .board(new Board(22, 16), 65)
                 .showPieceNames()
                 .show();
 

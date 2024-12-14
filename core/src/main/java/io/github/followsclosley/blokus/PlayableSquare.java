@@ -30,4 +30,11 @@ public class PlayableSquare {
 
         return clearCount;
     }
+
+    public void setAll(Player player){
+        upperLeft = player;
+        upperRight = player;
+        lowerLeft = player;
+        LowerRight = player;
+    }
 }

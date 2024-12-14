@@ -22,37 +22,11 @@ public class Board {
         this.board = new Piece[width][height];
         this.playable = new PlayableSquare[width][height];
     }
-
-    /**
-     * Initialize the board in the following way:
-     * <ol>
-     *     <li>Player 0 is placed in the upper left corner and that corner is marked as playable.</li>
-     *     <li>Player 1 is placed in the upper right corner and that corner is marked as playable.</li>
-     *     <li>Player 2 is placed in the lower right corner and that corner is marked as playable.</li>
-     *     <li>Player 3 is placed in the lower left corner and that corner is marked as playable.</li>
-     * </ol>
-     * @param players the players
-     */
-    public void init(Player... players){
-        if (players.length > 0) {
-            playable[0][0] = new PlayableSquare(new Coordinate(0, 0));
-            playable[0][0].setUpperLeft(players[0]);
-        }
-
-        if (players.length > 1) {
-            playable[width - 1][0] = new PlayableSquare(new Coordinate(width - 1, 0));
-            playable[width - 1][0].setUpperRight(players[1]);
-        }
-
-        if (players.length > 2) {
-            playable[width - 1][height - 1] = new PlayableSquare(new Coordinate(width - 1, height - 1));
-            playable[width - 1][height - 1].setLowerRight(players[2]);
-        }
-
-        if (players.length > 3) {
-            playable[0][height - 1] = new PlayableSquare(new Coordinate(0, height - 1));
-            playable[0][height - 1].setLowerLeft(players[3]);
-        }
+    public static Board createTwoPlayerBoard(){
+        return new Board(14, 14);
+    }
+    public static Board createFourPlayerBoard(){
+        return new Board(20, 20);
     }
 
     public Piece getPiece(Coordinate c){
@@ -131,7 +105,7 @@ public class Board {
 
                         if (valid) {
                             if (playable == null) {
-                                setPlayable(diagonalCoordinate, playable = new PlayableSquare(diagonalCoordinate));
+                                setPlayable(playable = new PlayableSquare(diagonalCoordinate));
                             }
                             setPlayerOn(playable, i).accept(piece.getPlayer());
                         } else {
@@ -163,8 +137,9 @@ public class Board {
         };
     }
 
-    public void setPlayable(Coordinate c, PlayableSquare playable){
-        this.playable[c.getX()][c.getY()] = playable;
+    public PlayableSquare setPlayable(PlayableSquare playable){
+        this.playable[playable.getCoordinate().getX()][playable.getCoordinate().getY()] = playable;
+        return playable;
     }
     public PlayableSquare getPlayable(Coordinate c){
         return getPlayable(c.getX(), c.getY());
