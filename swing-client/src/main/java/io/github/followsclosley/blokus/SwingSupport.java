@@ -1,6 +1,7 @@
 package io.github.followsclosley.blokus;
 
 import io.github.followsclosley.blokus.components.BoardPanel;
+import io.github.followsclosley.blokus.components.PlayableBoardPanel;
 import lombok.Getter;
 
 import javax.swing.*;
@@ -9,19 +10,24 @@ import java.awt.*;
 
 @Getter
 public class SwingSupport {
-
+    private Board hand;
     private Board board;
-    private BoardPanel boardPanel;
+    private PlayableBoardPanel boardPanel;
+    private BoardPanel handPanel;
 
     public SwingSupport board(Board board) {
         this.board = board;
-        this.boardPanel = new BoardPanel(board);
+        this.boardPanel = new PlayableBoardPanel(board);
         return this;
     }
 
     public SwingSupport board(Board board, int pieceSize) {
-        this.board = board;
-        this.boardPanel = new BoardPanel(board, pieceSize);
+        this.boardPanel = new PlayableBoardPanel(this.board = board, pieceSize);
+        return this;
+    }
+
+    public SwingSupport hand(Board board, int pieceSize) {
+        this.handPanel = new BoardPanel(this.hand = board, pieceSize);
         return this;
     }
 
@@ -50,7 +56,9 @@ public class SwingSupport {
         frame.setLayout(new BorderLayout());
         //GridBagConstraints c = new GridBagConstraints();
         frame.add(this.boardPanel, BorderLayout.CENTER);
-        //frame.add(statusPanel, BorderLayout.SOUTH);
+        if( handPanel != null ) {
+            frame.add(handPanel, BorderLayout.EAST);
+        }
         frame.pack();
         frame.setVisible(true);
 
