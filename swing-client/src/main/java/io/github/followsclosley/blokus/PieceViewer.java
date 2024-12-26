@@ -8,7 +8,7 @@ public class PieceViewer {
         SwingSupport support = new SwingSupport()
                 .board(new Board(22, 16), 65)
                 .showPieceNames()
-                //.showMoves()
+                .showMoves()
                 .show();
 
         Player player0 = new Player(0, "Player 0");

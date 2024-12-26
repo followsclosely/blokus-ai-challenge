@@ -1,13 +1,14 @@
 package io.github.followsclosley.blokus.components;
 
-import io.github.followsclosley.blokus.Board;
-import io.github.followsclosley.blokus.Piece;
-import io.github.followsclosley.blokus.PlayableSquare;
-import io.github.followsclosley.blokus.Player;
+import io.github.followsclosley.blokus.*;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 @Slf4j
 public class PlayableBoardPanel extends BoardPanel {
@@ -15,22 +16,28 @@ public class PlayableBoardPanel extends BoardPanel {
     @Setter
     private boolean showMoves = false;
 
+    private final MyMouseMotionAdapter mouseMotionAdapter = new MyMouseMotionAdapter();
+
     public PlayableBoardPanel(Board board) {
-        super(board);
+        this(board, DEFAULT_SQUARE_SIZE);
     }
     
     public PlayableBoardPanel(Board board, int squareSize) {
         super(board, squareSize);
+        addMouseMotionListener(mouseMotionAdapter);
     }
-
-
-
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         if ( showMoves ) {
             drawPlayableSquares(g);
+        }
+
+        if( this.selectedPiece != null) {
+            for(int[] xy : this.selectedPiece.getShape()){
+                paintPiece(this.selectedPiece, mouseMotionAdapter.lastCoordinate.getX()+xy[0], mouseMotionAdapter.lastCoordinate.getY()+xy[1], (Graphics2D) g);
+            }
         }
     }
 
@@ -67,4 +74,22 @@ public class PlayableBoardPanel extends BoardPanel {
             }
         }
     }
+
+    public final class MyMouseMotionAdapter extends MouseMotionAdapter {
+        @Getter
+        public Coordinate lastCoordinate = new Coordinate(-1,-1);
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            int x = e.getX() / squareSize;
+            int y = e.getY() / squareSize;
+
+
+            if( lastCoordinate.getX() != x || lastCoordinate.getY() != y ) {
+                this.lastCoordinate = new Coordinate(x,y);
+                System.out.println("Location " + x + ", " + y);
+                PlayableBoardPanel.this.repaint();
+            }
+        }
+    };
 }

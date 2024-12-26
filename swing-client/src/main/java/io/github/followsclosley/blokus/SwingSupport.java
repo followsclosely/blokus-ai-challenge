@@ -2,6 +2,7 @@ package io.github.followsclosley.blokus;
 
 import io.github.followsclosley.blokus.components.BoardPanel;
 import io.github.followsclosley.blokus.components.PlayableBoardPanel;
+import io.github.followsclosley.blokus.components.PlayerHandPanel;
 import lombok.Getter;
 
 import javax.swing.*;
@@ -27,7 +28,11 @@ public class SwingSupport {
     }
 
     public SwingSupport hand(Board board, int pieceSize) {
-        this.handPanel = new BoardPanel(this.hand = board, pieceSize);
+        this.handPanel = new PlayerHandPanel(this.hand = board, pieceSize);
+        this.handPanel.addPieceSelectedEventListener((e) -> {
+            this.boardPanel.setSelectedPiece(e.getPiece());
+            this.boardPanel.repaint();
+        });
         return this;
     }
 

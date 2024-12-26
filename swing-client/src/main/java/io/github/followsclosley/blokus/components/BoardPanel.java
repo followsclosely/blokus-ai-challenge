@@ -2,6 +2,8 @@ package io.github.followsclosley.blokus.components;
 
 import io.github.followsclosley.blokus.Board;
 import io.github.followsclosley.blokus.Piece;
+import io.github.followsclosley.blokus.event.PieceSelectedEvent;
+import io.github.followsclosley.blokus.event.PieceSelectedEventListener;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class BoardPanel extends JPanel {
@@ -22,11 +26,18 @@ public class BoardPanel extends JPanel {
     @Setter
     private boolean showPieceNames = false;
 
-
     protected final Color[] COLORS = {Color.GREEN, Color.BLUE, Color.RED, Color.YELLOW};
     protected final Color[] COLORS_DARKER = {Color.GREEN.darker(), Color.BLUE.darker(), Color.RED.darker(), Color.YELLOW.darker()};
+
+    protected final Color[] SELECTED_COLORS = {Color.GREEN.brighter(), Color.BLUE.brighter(), Color.RED.brighter(), Color.YELLOW.brighter()};
+    protected final Color[] SELECTED_COLORS_DARKER = {Color.GREEN, Color.BLUE, Color.RED, Color.YELLOW};
+
     protected final Board board;
     protected Dimension defaultDimension;
+
+    protected Piece selectedPiece;
+
+    private final List<PieceSelectedEventListener> pieceSelectedEventListeners = new ArrayList<>();
 
     public BoardPanel(Board board) {
         this(board, DEFAULT_SQUARE_SIZE);
@@ -60,7 +71,8 @@ public class BoardPanel extends JPanel {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics graphics) {
+        Graphics2D g = (Graphics2D) graphics.create();
         super.paintComponent(g);
 
         //Draw the pieces on the board
@@ -68,44 +80,60 @@ public class BoardPanel extends JPanel {
             for (int x = 0, width = board.getWidth(); x < width; x++) {
 
                 Piece piece = board.getPiece(x, y);
+
+                // Set translucency for the selected piece
+                if (piece != null && selectedPiece != null && !selectedPiece.equals(piece)) {
+                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.35f));
+                } else {
+                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+                }
+
                 if(piece != null) {
-                    Color color = COLORS[piece.getPlayer().getIndex()];
-
-                    //Draw the space between the horizontal pieces
-                    Piece pieceToTheRight = board.getPiece(x + 1, y);
-                    if (pieceToTheRight != null && pieceToTheRight.equals(piece)) {
-                        g.setColor(COLORS_DARKER[piece.getPlayer().getIndex()].darker());
-                        g.fillRect((x+1) * squareSize-borderWidth-1, y * squareSize+2, smallJoint, largeJoint);
-                    }
-
-                    //Draw the space between the vertical pieces
-                    Piece pieceBelow = board.getPiece(x, y + 1);
-                    if (pieceBelow != null && pieceBelow.equals(piece)) {
-                        g.setColor(COLORS_DARKER[piece.getPlayer().getIndex()].darker());
-                        g.fillRect(x * squareSize+1, (y+1) * squareSize-(borderWidth+1), largeJoint, smallJoint);
-                    }
-
-
-                    //Draw the piece
-                    g.setColor(COLORS_DARKER[piece.getPlayer().getIndex()]);
-                    g.fillRoundRect(x * squareSize, y * squareSize, squareSize - gridWidth, squareSize - gridWidth, 10, 10);
-                    g.setColor(color);
-                    g.fillRoundRect(x * squareSize+borderWidth, y * squareSize+borderWidth, squareSize - (borderWidth*2+gridWidth), squareSize - (borderWidth*2+gridWidth), 10, 10);
-
-                    if(showPieceNames) {
-                        g.setColor(COLORS_DARKER[piece.getPlayer().getIndex()].darker());
-                        g.drawString(String.valueOf(piece.getName()), x * squareSize + 18, y * squareSize + 30);
-                    }
-
-
-
+                    paintPiece(piece, x, y, g);
                 } else {
                     g.setColor(Color.WHITE);
                     g.fillRoundRect(x * squareSize, y * squareSize, squareSize - 5, squareSize - 5, 10, 10);
                 }
-
-
             }
+        }
+    }
+
+    public void paintPiece(Piece piece, int x, int y, Graphics2D g) {
+        //Draw the space between the horizontal pieces
+        Piece pieceToTheRight = board.getPiece(x + 1, y);
+        if (pieceToTheRight != null && pieceToTheRight.equals(piece)) {
+            g.setColor(COLORS_DARKER[piece.getPlayer().getIndex()].darker());
+            g.fillRect((x+1) * squareSize-borderWidth-1, y * squareSize+2, smallJoint, largeJoint);
+        }
+
+        //Draw the space between the vertical pieces
+        Piece pieceBelow = board.getPiece(x, y + 1);
+        if (pieceBelow != null && pieceBelow.equals(piece)) {
+            g.setColor(COLORS_DARKER[piece.getPlayer().getIndex()].darker());
+            g.fillRect(x * squareSize+1, (y+1) * squareSize-(borderWidth+1), largeJoint, smallJoint);
+        }
+
+        //Draw the piece
+        g.setColor(COLORS_DARKER[piece.getPlayer().getIndex()]);
+        g.fillRoundRect(x * squareSize, y * squareSize, squareSize - gridWidth, squareSize - gridWidth, 10, 10);
+        g.setColor(COLORS[piece.getPlayer().getIndex()]);
+        g.fillRoundRect(x * squareSize+borderWidth, y * squareSize+borderWidth, squareSize - (borderWidth*2+gridWidth), squareSize - (borderWidth*2+gridWidth), 10, 10);
+
+        if(showPieceNames) {
+            g.setColor(COLORS_DARKER[piece.getPlayer().getIndex()].darker());
+            g.drawString(String.valueOf(piece.getName()), x * squareSize + 18, y * squareSize + 30);
+        }
+    }
+
+    public void addPieceSelectedEventListener(PieceSelectedEventListener listener) {
+        this.pieceSelectedEventListeners.add(listener);
+    }
+
+    public void setSelectedPiece(Piece piece) {
+        this.selectedPiece = piece;
+        if( this.selectedPiece != null ) {
+            PieceSelectedEvent event = new PieceSelectedEvent(piece, piece.getPlayer());
+            this.pieceSelectedEventListeners.forEach(l -> l.onPieceSelected(event));
         }
     }
 }
