@@ -36,6 +36,9 @@ public class Board {
         return ( x<0 || x>=width || y<0 || y>=height) ? null : board[x][y];
     }
 
+    public void setPiece(Coordinate c, Piece piece) {
+        setPiece(c.getX(), c.getY(), piece);
+    }
     /**
      * Set the piece on the board.
      *

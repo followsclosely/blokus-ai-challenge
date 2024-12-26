@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 
 @Slf4j
 public class PlayableBoardPanel extends BoardPanel {
@@ -24,19 +25,25 @@ public class PlayableBoardPanel extends BoardPanel {
     
     public PlayableBoardPanel(Board board, int squareSize) {
         super(board, squareSize);
+        addMouseListener(mouseMotionAdapter);
         addMouseMotionListener(mouseMotionAdapter);
+
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics graphics) {
+        Graphics2D g = (Graphics2D) graphics;
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
         super.paint(g);
         if ( showMoves ) {
             drawPlayableSquares(g);
         }
 
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.15f));
         if( this.selectedPiece != null) {
             for(int[] xy : this.selectedPiece.getShape()){
-                paintPiece(this.selectedPiece, mouseMotionAdapter.lastCoordinate.getX()+xy[0], mouseMotionAdapter.lastCoordinate.getY()+xy[1], (Graphics2D) g);
+                paintPiece(this.selectedPiece, mouseMotionAdapter.lastCoordinate.getX()+xy[0], mouseMotionAdapter.lastCoordinate.getY()+xy[1], g);
             }
         }
     }
@@ -75,21 +82,29 @@ public class PlayableBoardPanel extends BoardPanel {
         }
     }
 
-    public final class MyMouseMotionAdapter extends MouseMotionAdapter {
+    public final class MyMouseMotionAdapter extends MouseAdapter implements MouseMotionListener {
         @Getter
         public Coordinate lastCoordinate = new Coordinate(-1,-1);
 
+        public void mouseClicked(MouseEvent e) {
+            System.out.println("Clicked " + this.lastCoordinate.getX() + ", " + this.lastCoordinate.getY());
+            PlayableBoardPanel.this.board.setPiece(lastCoordinate, PlayableBoardPanel.this.selectedPiece);
+        }
+
         @Override
         public void mouseMoved(MouseEvent e) {
-            int x = e.getX() / squareSize;
-            int y = e.getY() / squareSize;
-
-
-            if( lastCoordinate.getX() != x || lastCoordinate.getY() != y ) {
-                this.lastCoordinate = new Coordinate(x,y);
-                System.out.println("Location " + x + ", " + y);
+            Coordinate coordinate = getCoordinate(e);
+            if( !coordinate.equals(this.lastCoordinate) ) {
+                this.lastCoordinate = getCoordinate(e);
+                System.out.println("Location " + this.lastCoordinate.getX() + ", " + this.lastCoordinate.getY());
                 PlayableBoardPanel.this.repaint();
             }
+        }
+
+        public void mouseDragged(MouseEvent e) {}
+
+        public Coordinate getCoordinate(MouseEvent e) {
+            return new Coordinate(e.getX() / squareSize, e.getY() / squareSize);
         }
     };
 }
