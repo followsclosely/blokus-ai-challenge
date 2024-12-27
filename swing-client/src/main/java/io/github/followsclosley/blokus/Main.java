@@ -17,6 +17,17 @@ public class Main {
 
         PieceFactory factory = new PieceFactory();
 
+
+
+        SwingSupport support = new SwingSupport()
+                .board(board, 50)
+                .hand(hand, 25)
+                //.showPieceNames()
+                .showMoves()
+                .show();
+
+        Thread.sleep(3000);
+
         int x = 0;
         int y = 0;
         int maxY = 0;
@@ -35,12 +46,7 @@ public class Main {
             }
         }
 
-        SwingSupport support = new SwingSupport()
-                .board(board, 50)
-                .hand(hand, 25)
-                //.showPieceNames()
-                .showMoves()
-                .show();
+        support.getHandPanel().repaint();
 
     }
 }

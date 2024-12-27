@@ -81,12 +81,7 @@ public class BoardPanel extends JPanel {
 
                 Piece piece = board.getPiece(x, y);
 
-                // Set translucency for the selected piece
-                if (piece != null && selectedPiece != null && !selectedPiece.equals(piece)) {
-                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.35f));
-                } else {
-                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-                }
+                setComposite(piece, x, y, g);
 
                 if(piece != null) {
                     paintPiece(piece, x, y, g);
@@ -124,6 +119,8 @@ public class BoardPanel extends JPanel {
             g.drawString(String.valueOf(piece.getName()), x * squareSize + 18, y * squareSize + 30);
         }
     }
+
+    public void setComposite(Piece piece, int x, int y, Graphics2D g){}
 
     public void addPieceSelectedEventListener(PieceSelectedEventListener listener) {
         this.pieceSelectedEventListeners.add(listener);

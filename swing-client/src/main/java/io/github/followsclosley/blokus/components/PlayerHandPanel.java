@@ -3,6 +3,7 @@ package io.github.followsclosley.blokus.components;
 import io.github.followsclosley.blokus.Board;
 import io.github.followsclosley.blokus.Piece;
 
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -30,6 +31,13 @@ public class PlayerHandPanel extends BoardPanel {
         });
     }
 
+    public void setComposite(Piece piece, int x, int y, Graphics2D g){
+        if (piece != null && selectedPiece != null && !selectedPiece.equals(piece)) {
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.35f));
+        } else {
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+        }
+    }
 
 
 }

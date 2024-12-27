@@ -89,6 +89,7 @@ public class PlayableBoardPanel extends BoardPanel {
         public void mouseClicked(MouseEvent e) {
             System.out.println("Clicked " + this.lastCoordinate.getX() + ", " + this.lastCoordinate.getY());
             PlayableBoardPanel.this.board.setPiece(lastCoordinate, PlayableBoardPanel.this.selectedPiece);
+            PlayableBoardPanel.this.setSelectedPiece(null);
         }
 
         @Override
